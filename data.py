@@ -38,59 +38,76 @@ class Corpus():
 # 				pickle.dump([self.word2id, self.id2word, self.train0, self.train1, self.dev0, self.dev1, self.test0, self.test1, self.gen0, self.gen1],f)
 
 	def load_data(self):
-		if self.args.treebank:
-			with open('data/treebank/all.txt','r') as f:
-				lines = f.readlines()
+		with open('data/swbd/dev_0.txt',"r") as f:
+			for line in f.readlines():
+				self.dev0.append(self.add_line(ln))
+		with open('data/swbd/dev_1.txt',"r") as f:
+			for line in f.readlines():
+				self.dev1.append(self.add_line(ln))
+		with open('data/swbd/train_0.txt',"r") as f:
+			for line in f.readlines():
+				self.train0.append(self.add_line(ln))
+		with open('data/swbd/train_1.txt',"r") as f:
+			for line in f.readlines():
+				self.train1.append(self.add_line(ln))
+		with open('data/swbd/test_0.txt',"r") as f:
+			for line in f.readlines():
+				self.test0.append(self.add_line(ln))
+		with open('data/swbd/test_1.txt',"r") as f:
+			for line in f.readlines():
+				self.test1.append(self.add_line(ln))
+		#if self.args.treebank:
+			#with open('data/treebank/all.txt','r') as f:
+				#lines = f.readlines()
 
-				freq = Counter()
-				for ln in lines:
-					for w in ln.strip().split():
-						if w.isnumeric(): continue
-						if w.count('/NE/') > 0: continue
-						freq.update([w])
-				for w in freq:
-					if(freq[w] >= self.threshold):
-						self.add_token(w)
+				#freq = Counter()
+				#for ln in lines:
+					#for w in ln.strip().split():
+						#if w.isnumeric(): continue
+						#if w.count('/NE/') > 0: continue
+						#freq.update([w])
+				#for w in freq:
+					#if(freq[w] >= self.threshold):
+						#self.add_token(w)
 
-				for ln in lines:
-					self.train0.append(self.add_line(ln))
+				#for ln in lines:
+					#self.train0.append(self.add_line(ln))
 		
-		if self.args.opus:
-			with open('data/OPUS/opus_dataset.txt','r') as f:
-				lines = f.readlines()
-
-				freq = Counter()
-				for ln in lines:
-					for w in ln.strip().split():
-						if w.isnumeric(): continue
-						if w.count('/NE/') > 0: continue
-						freq.update([w])
-				for w in freq:
-					if(freq[w] >= self.threshold):
-						self.add_token(w)
-
-				for ln in lines:
-					self.train0.append(self.add_line(ln))
-		
-		with open('data/moviecs/moviecs.json') as f:
-			data = json.load(f)
+		#if self.args.opus:
+			#with open('data/OPUS/opus_dataset.txt','r') as f:
+			#	lines = f.readlines()
+#
+#				freq = Counter()
+#				for ln in lines:
+#					for w in ln.strip().split():
+#						if w.count('/NE/') > 0: continue
+#						freq.update([w])
+#				for w in freq:
+#					if(freq[w] >= self.threshold):
+#						self.add_token(w)
+#
+#				for ln in lines:
+#					self.train0.append(self.add_line(ln))
+#		
+		#with open('data/moviecs/moviecs.json') as f:
+			#data = json.load(f)
 			
-			for i in range(len(data)):
-				if data[i]["dataset"] == "train":
-					self.train0.append(self.add_line(data[i]["mono"]))
-					if data[i]["gold"].strip() != "":
-						self.train1.append(self.add_line(data[i]["gold"]))
-					if self.args.mturk:
-						for j in range(len(data[i]["mturk"])):
-							self.train1.append(self.add_line(data[i]["mturk"][j]))
+			#for i in range(len(data)):
+				#if data[i]["dataset"] == "train":
+					#self.train0.append(self.add_line(data[i]["mono"]))
+					#if data[i]["gold"].strip() != "":
+						#self.train1.append(self.add_line(data[i]["gold"]))
+					#if self.args.mturk:
+						#for j in range(len(data[i]["mturk"])):
+							#self.train1.append(self.add_line(data[i]["mturk"][j]))
 						
-				elif data[i]["dataset"] == "valid":
-					self.dev0.append(self.add_line(data[i]["mono"]))
-					self.dev1.append(self.add_line(data[i]["gold"]))
+				#elif data[i]["dataset"] == "valid":
+					#self.dev0.append(self.add_line(data[i]["mono"]))
+					#self.dev1.append(self.add_line(data[i]["gold"]))
 				
-				elif data[i]["dataset"] == "test":
-					self.test0.append(self.add_line(data[i]["mono"]))
-					self.test1.append(self.add_line(data[i]["gold"]))
+				#elif data[i]["dataset"] == "test":
+					#self.test0.append(self.add_line(data[i]["mono"]))
+					#self.test1.append(self.add_line(data[i]["gold"]))
 	
 	def add_line(self, l):
 		for w in l.strip().split():
